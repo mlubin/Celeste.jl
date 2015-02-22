@@ -6,23 +6,28 @@
 module ElboDeriv
 
 using CelesteTypes
+using Docile
+@docstrings
+
 import Util
 
+@doc """
+SensitiveFloat objects for expectations involving r_s and c_s.
 
+Args:
+  vs: A vector of variational parameters
+
+Attributes:
+  Each matrix has one row for each color and a column for
+  star / galaxy.  Row 3 is the gamma distribute baseline brightness,
+  and all other rows are lognormal offsets.
+  E_l_a: A 5 x 2 matrix of expectations and derivatives of
+    color terms
+  E_ll_a: A 5 x 2 matrix of expectations and derivatives of
+    squared color terms
+""" ->
 immutable SourceBrightness
-    # SensitiveFloat objects for expectations involving r_s and c_s.
-    #
-    # Args:
-    #   vs: A vector of variational parameters
-    #
-    # Attributes:
-    #   Each matrix has one row for each color and a column for
-    #   star / galaxy.  Row 3 is the gamma distribute baseline brightness,
-    #   and all other rows are lognormal offsets.
-    #   E_l_a: A 5 x 2 matrix of expectations and derivatives of
-    #     color terms
-    #   E_ll_a: A 5 x 2 matrix of expectations and derivatives of
-    #     squared color terms
+
 
     E_l_a::Matrix{SensitiveFloat}  # [E[l|a=0], E[l]|a=1]]
     E_ll_a::Matrix{SensitiveFloat}   # [E[l^2|a=0], E[l^2]|a=1]]
