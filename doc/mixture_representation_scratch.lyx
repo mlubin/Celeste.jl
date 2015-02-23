@@ -163,15 +163,25 @@ Under every variational distribution of this class,
 \begin_inset Formula $\lambda_{k}$
 \end_inset
 
- expectations are now easy.
- But what about 
+ expectations are now easy, and note that the difficult 
 \begin_inset Formula $E_{q}\left[\log\left(z_{k}!\right)\right]$
 \end_inset
 
-? You would like to have something like
+ term will cancel with the entropy term in the ELBO.
+ Let the variational probabilities of 
+\begin_inset Formula $q\left(z\right)$
+\end_inset
+
+ be 
+\begin_inset Formula $p_{k}$
+\end_inset
+
+, then
 \begin_inset Formula 
 \begin{eqnarray*}
-p_{q}\left(z_{k}=1\right) & = & x\frac{\lambda_{k}}{\sum_{s}\lambda_{s}}
+q\left(z\right) & = & \frac{x!}{\prod_{k}z_{k}!}\prod_{k}p_{k}^{z_{k}}\\
+E_{q}\left(\log q\left(z\right)\right) & = & -\sum_{k}E_{q}\left[\log z_{k}!\right]+E_{q}\left[z_{k}\right]\log p_{k}\\
+ & = & -\sum_{k}E_{q}\left[\log z_{k}!\right]+xp_{k}\log p_{k}
 \end{eqnarray*}
 
 \end_inset
@@ -180,12 +190,40 @@ p_{q}\left(z_{k}=1\right) & = & x\frac{\lambda_{k}}{\sum_{s}\lambda_{s}}
 \end_layout
 
 \begin_layout Standard
-However, that may not still be the maximum when you take into account the
- 
-\begin_inset Formula $\sum_{k}\log\left(z_{k}!\right)$
+So that
+\begin_inset Formula 
+\begin{eqnarray*}
+ELBO & = & E_{q}\left[\sum_{k}\left(z_{k}\log\lambda_{k}-\lambda_{k}-\log\left(z_{k}!\right)\right)-\log q\left(z\right)-\log q\left(\lambda\right)\right]\\
+ & = & \sum_{k}\left(E_{q}\left[z_{k}\right]E_{q}\left[\log\lambda_{k}\right]-E_{q}\left[\lambda_{k}\right]-E_{q}\left[\log\left(z_{k}!\right)\right]+E_{q}\left[\log\left(z_{k}!\right)\right]-E_{q}\left[z_{k}\right]\log p_{k}\right)-E_{q}\left[\log q\left(\lambda\right)\right]\\
+ & = & \sum_{k}\left(xp_{k}E_{q}\left[\log\lambda_{k}\right]-xp_{k}\log p_{k}\right)-\sum_{k}E_{q}\left[\lambda_{k}\right]-E_{q}\left[\log q\left(\lambda\right)\right]
+\end{eqnarray*}
+
 \end_inset
 
- terms.
+
+\end_layout
+
+\begin_layout Standard
+This can be easily maximized with respect to 
+\begin_inset Formula $p_{k}$
+\end_inset
+
+ either with coordinate ascent or other methods.
+ For interest, note that the coordinate ascent gives you the Lagrangian
+\begin_inset Formula 
+\begin{eqnarray*}
+F\left(p_{k}\right) & = & xp_{k}E_{q}\left[\log\lambda_{k}\right]-xp_{k}\log p_{k}+\gamma\left(\sum p_{k}-1\right)\\
+xE_{q}\left[\log\lambda_{k}\right] & = & x\log p_{k}+x+\gamma\\
+\log p_{k} & = & E_{q}\left[\log\lambda_{k}\right]-1-\frac{\gamma}{x}\\
+p_{k} & = & \exp\left(E_{q}\left[\log\lambda_{k}\right]\right)C\\
+\sum p_{k} & = & 1\Rightarrow\\
+C & = & \left(\sum_{k'}\exp\left(E_{q}\left[\log\lambda_{k'}\right]\right)\right)^{-1}\\
+p_{k} & = & \frac{\exp\left(E_{q}\left[\log\lambda_{k'}\right]\right)}{\sum_{k'}\exp\left(E_{q}\left[\log\lambda_{k'}\right]\right)}
+\end{eqnarray*}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
