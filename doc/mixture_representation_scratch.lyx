@@ -59,6 +59,146 @@
 
 \begin_body
 
+\begin_layout Section
+Variational Representation of Sums of Poissons
+\end_layout
+
+\begin_layout Standard
+For each pixel 
+\begin_inset Formula $x$
+\end_inset
+
+, we have a model like
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+P\left(x\vert\lambda\right) & = & Poisson\left(\sum_{k}\lambda_{k}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where each 
+\begin_inset Formula $\lambda_{k}$
+\end_inset
+
+ is something relatively simple like
+\begin_inset Formula 
+\begin{eqnarray*}
+\lambda_{k} & = & w_{k}r_{s}\exp\left(c_{sb}\right)\exp\left(c_{sb'}\right)\phi\left(\textrm{stuff}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We would like to define a variational distribution such that we can easily
+ take the expectation 
+\begin_inset Formula $E_{q}\left(\log P\left(x\vert\lambda\right)\right)$
+\end_inset
+
+.
+ For each pixel, define the auxiliary variables 
+\begin_inset Formula $z_{k}$
+\end_inset
+
+ so that
+\begin_inset Formula 
+\begin{eqnarray*}
+P\left(z_{k}\vert\lambda_{k}\right) & = & Poisson\left(\lambda_{k}\right)\\
+x & = & \sum z_{k}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+These 
+\begin_inset Formula $z$
+\end_inset
+
+ are unknown, but the conditional likelihood is 
+\begin_inset Formula 
+\begin{eqnarray*}
+P\left(x\vert\lambda,z\right) & = & P\left(x\vert z\right)P\left(z\vert\lambda\right)\\
+ & = & 1\left(\sum z_{k}=x\right)\prod_{k}P\left(z_{k}\vert\lambda_{k}\right)\\
+ & = & 1\left(\sum z_{k}=x\right)\prod_{k}\frac{\lambda_{k}^{z_{k}}e^{-\lambda_{k}}}{z_{k}!}\\
+\log P\left(x\vert\lambda,z\right) & = & \log1\left(\sum z_{k}=x\right)+\sum_{k}\left(z_{k}\log\lambda_{k}-\lambda_{k}-\log\left(z_{k}!\right)\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Define the mean field variational distributions
+\begin_inset Formula 
+\begin{eqnarray*}
+z & \sim & Multinomial\\
+z & \perp & \lambda
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Under every variational distribution of this class, 
+\begin_inset Formula $E_{q}\left[\log1\left(\sum z_{k}=x\right)\right]=0$
+\end_inset
+
+.
+ The 
+\begin_inset Formula $\lambda_{k}$
+\end_inset
+
+ expectations are now easy.
+ But what about 
+\begin_inset Formula $E_{q}\left[\log\left(z_{k}!\right)\right]$
+\end_inset
+
+? You would like to have something like
+\begin_inset Formula 
+\begin{eqnarray*}
+p_{q}\left(z_{k}=1\right) & = & x\frac{\lambda_{k}}{\sum_{s}\lambda_{s}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+However, that may not still be the maximum when you take into account the
+ 
+\begin_inset Formula $\sum_{k}\log\left(z_{k}!\right)$
+\end_inset
+
+ terms.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Don't read anything below
+\end_layout
+
 \begin_layout Standard
 This is just stream of consciousness thinking about representing the Celeste
  likelihood as a mixture with auxiliary variables.
